@@ -1,7 +1,19 @@
 package puzzle;
 
+import java.util.List;
+
 public class Principal {
 	public static void main(String[] args) {
+		
+		KekenParser parser = new KekenParser();
+		List<KenkenPuzzle>  kenken2 = parser.readFile("C:\\Maestria\\Ciclo 2\\IA\\kenken.txt");
+		
+		for (KenkenPuzzle keken3 : kenken2) {
+			keken3.printBoard();			
+		}
+		
+
+			
 		KenkenPuzzle solver = new KenkenPuzzle(4); // Tamaño del tablero (4x4 en este caso)
 
         // Ingresa los datos del tablero y define las regiones aquí
