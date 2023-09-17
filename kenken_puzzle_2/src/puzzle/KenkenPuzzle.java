@@ -60,9 +60,46 @@ public class KenkenPuzzle {
 
     // Método para validar si una solución es correcta
     public boolean isSolutionValid() {
-        // Implementa la lógica de validación aquí
-        // Verifica que las reglas del juego se cumplan
-        return true; // Cambia esto según tu implementación
+    	 // Verificar que cada celda contenga un número válido (1 al N)
+        int size = board.length;
+        for (int row = 0; row < size; row++) {
+            for (int col = 0; col < size; col++) {
+                int cellValue = board[row][col];
+                if (cellValue < 1 || cellValue > size) {
+                    return false; // La celda contiene un número inválido
+                }
+            }
+        }
+
+        // Verificar que se cumplan las reglas de las regiones
+        for (Region region : regions) {
+            int target = region.target;
+            char operator = region.operator;
+            List<Cell> cells = region.cells;
+            int result = (operator == '+') ? 0 : 1;
+
+            for (Cell cell : cells) {
+                int cellValue = board[cell.row][cell.col];
+
+            
+                switch (operator) {
+                    case '+':
+                        result += cellValue;
+                        break;
+
+                    case '*':
+                        result *= cellValue;
+                        break;
+                }
+
+            }
+
+            if (result != target) {
+                return false; // No se cumple el objetivo de la región
+            }
+        }
+
+        return true;// Cambia esto según tu implementación
     }
 
     // Método para resolver el KenKen
@@ -78,6 +115,24 @@ public class KenkenPuzzle {
             }
             System.out.println();
         }
+    }// Método para imprimir el tablero y las regiones
+    public void printBoardWithRegions() {
+        int size = board.length;
+
+        for (int row = 0; row < size; row++) {
+            for (int col = 0; col < size; col++) {
+                System.out.print(board[row][col] + " ");
+            }
+            System.out.println();
+        }
+
+        System.out.println("Regiones:");
+        for (Region region : regions) {
+            System.out.println("Objetivo: " + region.target + ", Operador: " + region.operator);
+            for (Cell cell : region.cells) {
+                System.out.println("   - Coordenadas (" + cell.row + ", " + cell.col + ")");
+            }
+        }
     }
-    
+
 }
