@@ -12,16 +12,7 @@ public class KenkenPuzzle {
         regions = new ArrayList<>();
     }
     
-    // Cell representation class
-    private class Cell {
-        int row;
-        int col;
-
-        public Cell(int row, int col) {
-            this.row = row;
-            this.col = col;
-        }
-    }
+    
 
     // Region representation class
     private class Region {
@@ -54,6 +45,15 @@ public class KenkenPuzzle {
             int col = cellCoords[i + 1];
             region.addCell(row, col);
         }
+
+        regions.add(region);
+    }
+    
+    public void addRegion(int target, char operator, List<Cell> cells) {
+        Region region = new Region();
+        region.target = target;
+        region.operator = operator;
+        region.cells = cells;
 
         regions.add(region);
     }
@@ -136,3 +136,4 @@ public class KenkenPuzzle {
     }
 
 }
+
