@@ -15,19 +15,19 @@ public class KenkenPuzzle {
     
 
     // Region representation class
-    private class Region {
-        List<Cell> cells;
-        int target;
-        char operator;
-
-        public Region() {
-            cells = new ArrayList<>();
-        }
-
-        public void addCell(int row, int col) {
-            cells.add(new Cell(row, col));
-        }
-    }
+//    private class Region {
+//        List<Cell> cells;
+//        int target;
+//        char operator;
+//
+//        public Region() {
+//            cells = new ArrayList<>();
+//        }
+//
+//        public void addCell(int row, int col) {
+//            cells.add(new Cell(row, col));
+//        }
+//    }
     
     // Método para ingresar los datos del tablero
     public void setCellValue(int row, int col, int value) {
@@ -49,11 +49,11 @@ public class KenkenPuzzle {
         regions.add(region);
     }
     
-    public void addRegion(int target, char operator, List<Cell> cells) {
+    public void addRegion(int target, char operator, List<Nodo<Coordenada>> nodos) {
         Region region = new Region();
         region.target = target;
         region.operator = operator;
-        region.cells = cells;
+        region.nodos = nodos;
 
         regions.add(region);
     }
@@ -75,11 +75,11 @@ public class KenkenPuzzle {
         for (Region region : regions) {
             int target = region.target;
             char operator = region.operator;
-            List<Cell> cells = region.cells;
+            List<Nodo<Coordenada>> nodos = region.nodos;
             int result = (operator == '+') ? 0 : 1;
 
-            for (Cell cell : cells) {
-                int cellValue = board[cell.row][cell.col];
+            for (Nodo<Coordenada> nodo : nodos) {
+                int cellValue = board[nodo.getEstado().getRow()][nodo.getEstado().getCol()];
 
             
                 switch (operator) {
@@ -129,8 +129,8 @@ public class KenkenPuzzle {
         System.out.println("Regiones:");
         for (Region region : regions) {
             System.out.println("Objetivo: " + region.target + ", Operador: " + region.operator);
-            for (Cell cell : region.cells) {
-                System.out.println("   - Coordenadas (" + cell.row + ", " + cell.col + ")");
+            for (Nodo<Coordenada> nodo : region.nodos) {
+                System.out.println("   - Coordenadas (" + nodo.getEstado().getRow() + ", " + nodo.getEstado().getCol() + ")");
             }
         }
     }

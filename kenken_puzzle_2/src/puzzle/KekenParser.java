@@ -41,7 +41,7 @@ public class KekenParser {
                 	String[] regionInfo = line.substring(2, line.length() - 1).split(",");                    
                 	int targetValue=0;
                     //int pos= 0;
-                    List<Cell> cells = new ArrayList<>();
+                    List<Nodo<Coordenada>> nodos = new ArrayList<>();
                     for (int pos=0; pos< regionInfo.length; pos++)
                     //for (String linea : regionInfo) 
                     {
@@ -55,12 +55,12 @@ public class KekenParser {
 	                         int col = Integer.parseInt(coordinates[1].substring(0, 1));
 	                         row--;
 	                         col--;
-	                         cells.add(new Cell(row, col));
+	                         nodos.add(new Nodo<Coordenada>(new Coordenada(row, col)));
                          
                     	}
                     	//pos++;
                     }                                       
-                    kekenreturn.addRegion(targetValue, operator, cells);
+                    kekenreturn.addRegion(targetValue, operator, nodos);
                     break; 
                 case '(': // se carga fixed value
                 	String[] fixedinfo = line.substring(1, line.length() - 1).split(",");
