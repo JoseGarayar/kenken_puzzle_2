@@ -12,43 +12,12 @@ public class KenkenPuzzle {
         regions = new ArrayList<>();
     }
     
-    
-
-    // Region representation class
-//    private class Region {
-//        List<Cell> cells;
-//        int target;
-//        char operator;
-//
-//        public Region() {
-//            cells = new ArrayList<>();
-//        }
-//
-//        public void addCell(int row, int col) {
-//            cells.add(new Cell(row, col));
-//        }
-//    }
-    
     // Método para ingresar los datos del tablero
     public void setCellValue(int row, int col, int value) {
         board[row][col] = value;
     }
     
  // Método para definir una región con su objetivo y operador
-    public void addRegion(int target, char operator, int... cellCoords) {
-        Region region = new Region();
-        region.target = target;
-        region.operator = operator;
-
-        for (int i = 0; i < cellCoords.length; i += 2) {
-            int row = cellCoords[i];
-            int col = cellCoords[i + 1];
-            region.addCell(row, col);
-        }
-
-        regions.add(region);
-    }
-    
     public void addRegion(int target, char operator, List<Nodo<Coordenada>> nodos) {
         Region region = new Region();
         region.target = target;
