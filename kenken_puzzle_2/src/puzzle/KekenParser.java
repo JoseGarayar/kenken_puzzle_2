@@ -10,10 +10,10 @@ public class KekenParser {
 	public KekenParser() {
 	}
 	
-	public  List<KenkenPuzzle> readFile (String fileName){
+	public  List<KenKenState> readFile (String fileName){
 		
-		List<KenkenPuzzle> kekenList =   new ArrayList<>();
-		KenkenPuzzle kekenreturn =  new KenkenPuzzle(0);
+		List<KenKenState> kekenList =   new ArrayList<>();
+		KenKenState kekenreturn =  new KenKenState(0);
 		try {
             BufferedReader br = new BufferedReader(new FileReader(fileName));
             int N = 0; // Tamaño del tablero
@@ -41,7 +41,7 @@ public class KekenParser {
                 	String[] regionInfo = line.substring(2, line.length() - 1).split(",");                    
                 	int targetValue=0;
                     //int pos= 0;
-                    List<Nodo<Coordenada>> nodos = new ArrayList<>();
+                	List<Coordenada> nodos = new ArrayList<>();
                     for (int pos=0; pos< regionInfo.length; pos++)
                     //for (String linea : regionInfo) 
                     {
@@ -55,7 +55,8 @@ public class KekenParser {
 	                         int col = Integer.parseInt(coordinates[1].substring(0, 1));
 	                         row--;
 	                         col--;
-	                         nodos.add(new Nodo<Coordenada>(new Coordenada(row, col)));
+	                         //nodos.add(new Nodo<Coordenada>(new Coordenada(row, col)));
+	                         nodos.add(new Coordenada(row, col));
                          
                     	}
                     	//pos++;
@@ -66,7 +67,7 @@ public class KekenParser {
                 	String[] fixedinfo = line.substring(1, line.length() - 1).split(",");
                 	if (fixedinfo.length==1){
                 		N = Integer.parseInt(fixedinfo[0]);
-                        kekenreturn = new KenkenPuzzle(N);            
+                        kekenreturn = new KenKenState(N);            
                 	}
                 	else
                 	{
