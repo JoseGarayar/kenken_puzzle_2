@@ -38,4 +38,8 @@ public class Borde<T> {
 	public boolean buscar(T nodo) {
 		return nodosBorde.contains(nodo);
 	}
+	
+	public boolean isEmpty(){
+		return borde.isEmpty();
+	}
 }

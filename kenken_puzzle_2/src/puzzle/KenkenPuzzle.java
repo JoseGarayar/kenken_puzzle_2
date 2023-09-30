@@ -71,10 +71,95 @@ public class KenkenPuzzle {
         return true;// Cambia esto según tu implementación
     }
 
-    // Método para resolver el KenKen
-    public void solve() {
-        // Implementa el algoritmo de resolución aquí
+    // Método para resolver el KenKen mediante BFS
+    public void solveByBFS() {
+    	System.out.println("Solving program...");
+        Borde<Nodo<Coordenada>> borde = new Borde<Nodo<Coordenada>>(true);
+        Nodo<Coordenada> nodoInicial = new Nodo<Coordenada>(new Coordenada(0,0));
+        borde.insert(nodoInicial);
+        while (!borde.isEmpty()) {
+        	Nodo<Coordenada> nodoActual = borde.pop();
+        	System.out.println(nodoActual.getEstado());
+        	int row = nodoActual.getEstado().getRow();
+        	int col = nodoActual.getEstado().getCol();
+        	
+        	// if we get here, we solve the kenken puzzle
+        	if (row == board.length) {
+        		System.out.println("Solución encontrada");
+        		printBoard();
+        		return;
+        	}
+        	
+        	// if cell has a value, go to next row
+        	if (col == board.length) {
+        		borde.insert(new Nodo<Coordenada>(new Coordenada(row + 1,0)));
+        		continue;
+        	}
+        	
+        	// if cell has a value, go to next column
+        	if (board[row][col] != 0) {
+        		borde.insert(new Nodo<Coordenada>(new Coordenada(row,col + 1)));
+        		continue;
+        	}
+        	
+        	// Test all possibilities in this cell
+        	for(int num = 1; num <= board.length; num++) {
+        		if (isValidMove(row,col,num)){
+        			setCellValue(row, col, num);
+        			printBoard();
+        			borde.insert(new Nodo<Coordenada>(new Coordenada(row,col + 1)));
+        		}
+        	}
+        	
+        	// if no valid solution
+        	setCellValue(row, col, 0);
+        }
+        System.out.println("No se encontró una solución válida");
     }
+    
+    private boolean isValidMove(int row, int col, int num) {
+    	// Verify if number is in the same row or column
+        for (int i = 0; i < board.length; i++) {
+            if (board[row][i] == num || board[i][col] == num) {
+                return false;
+            }
+        }
+
+        // Verify game rules (regions)
+        for (Region region : regions) {
+            if (region.nodos.stream().anyMatch(
+            		nodo -> nodo.getEstado().getRow() == row && nodo.getEstado().getCol() == col)
+            	) {
+                int regionResult = calculateRegionResult(region);
+                char operator = region.operator;
+
+                switch (operator) {
+                    case '+':
+                        return regionResult + num <= region.target;
+                    case '-':
+                        return regionResult - num == region.target || num - regionResult == region.target;
+                    case '*':
+                        return regionResult * num <= region.target;
+                    case '/':
+                        return regionResult % num == 0 && regionResult / num == region.target;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    // Función para calcular el resultado de una región
+    private int calculateRegionResult(Region region) {
+        int result = 0;
+
+        for (Nodo<Coordenada> nodo : region.nodos) {
+            result += board[nodo.getEstado().getRow()][nodo.getEstado().getCol()];
+        }
+
+        return result;
+    }
+
 
     // Método para imprimir el tablero
     public void printBoard() {
