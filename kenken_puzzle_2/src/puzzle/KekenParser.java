@@ -35,6 +35,8 @@ public class KekenParser {
                     break;
                 case '+':
                 case '*':
+                case '-':
+                case '/':
                 case 'x':	
                     // Se termina pussle
                 	char operator = line.charAt(0);

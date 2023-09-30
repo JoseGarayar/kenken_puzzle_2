@@ -11,21 +11,21 @@ public class Principal {
 		
 		
 		KekenParser parser = new KekenParser();
-		List<KenKenState>  puzzles = parser.readFile(System.getProperty("user.dir") + "\\kenken_puzzle_2\\src\\puzzle\\kenken1.txt");
+		List<KenKenState>  puzzles = parser.readFile(System.getProperty("user.dir") + "\\kenken_puzzle_2\\src\\puzzle\\kenken5.txt");
 		
 		for (KenKenState initialState : puzzles) {
 			KenKenSolver solver = new KenKenSolver();
 			Nodo initialNode = new Nodo(initialState, null, 0, 0, "left");
-			KenKenState solution = solver.solve(initialNode);
+			Nodo solution = solver.solve(initialNode);
 			
 			if (solution != null) {
 				System.out.println("There is a solution!.");
 	            // Print the solution here
-				for (int i = 0; i < solution.board.length; i++) {
+				for (int i = 0; i < solution.state.board.length; i++) {
 	                // Loop through the columns
-	                for (int j = 0; j < solution.board[i].length; j++) {
+	                for (int j = 0; j < solution.state.board[i].length; j++) {
 	                    // Print the element at matrix[i][j] followed by a space
-	                    System.out.print(solution.board[i][j] + " ");
+	                    System.out.print(solution.state.board[i][j] + " ");
 	                }
 	                // Print a newline after each row
 	                System.out.println();

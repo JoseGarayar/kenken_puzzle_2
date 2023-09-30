@@ -3,6 +3,7 @@ package puzzle;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -16,14 +17,14 @@ public class KenKenSolver {
 		explored = new Explorados();
 	}
 	
-	public KenKenState solve(Nodo initialNode) {
+	public Nodo solve(Nodo initialNode) {
         Borde frontier = new Borde(true); // Change to false to use LIFO (stack)
         frontier.insert(initialNode);
         while (!frontier.isEmpty()) {
         	Nodo currentNode = frontier.pop();
             KenKenState currentState = currentNode.state;
             if (isGoalState(currentState)) {
-                return currentState; // ¡We found the solution!
+                return currentNode; // ¡We found the solution!
             }
             explored.insert(currentNode);
 
@@ -31,7 +32,7 @@ public class KenKenSolver {
             List<Nodo> neighborNodes = generateNeighborNodes(currentNode);
 
             for (Nodo neighborNode : neighborNodes) {
-            	for (int i = 0; i < neighborNode.state.board.length; i++) {
+            	/*for (int i = 0; i < neighborNode.state.board.length; i++) {
                     // Loop through the columns
                     for (int j = 0; j < neighborNode.state.board[i].length; j++) {
                         // Print the element at matrix[i][j] followed by a space
@@ -39,9 +40,9 @@ public class KenKenSolver {
                     }
                     // Print a newline after each row
                     System.out.println();
-                }
-                if (!explored.buscar(neighborNode) && !isValueRepeatedInRowOrColumn(neighborNode.state.board)) {
-                	System.out.println("Hola!");
+                }*/            	
+                if (!explored.buscar(neighborNode) && !pruningStrategy(neighborNode.state)) {
+                	neighborNode.state.printBoard(); 
                     frontier.insert(neighborNode);
                 }
             }
@@ -89,6 +90,7 @@ public class KenKenSolver {
 	        newBoard[rowCoordenada][colCoordenada] = value;
 			KenKenState NeighbourState = new KenKenState(newBoard.length);
 			NeighbourState.board = newBoard;
+			NeighbourState.setRegions(currentState.getRegions());
 			Nodo neighbourNode = new Nodo(NeighbourState, currentNode, 0, currentNode.profundidad + 1, "");
 			listNewNodes.add(neighbourNode);
 		}
@@ -136,39 +138,17 @@ public class KenKenSolver {
 			return false;
 		}
 		
-		// Evaluating rows and columns
-		int filas = board.length;
-        int columnas = board[0].length;
-        // Verify rows
-        for (int fila = 0; fila < filas; fila++) {
-            Set<Integer> elementosVistos = new HashSet<>();
-            for (int columna = 0; columna < columnas; columna++) {
-                int elemento = board[fila][columna];
-                if (elementosVistos.contains(elemento) || elemento == 0) {
-                    return false; // A repeated element was found in the row
-                }
-                elementosVistos.add(elemento);
-            }
-        }
-        // Verify columns
-        for (int columna = 0; columna < columnas; columna++) {
-            Set<Integer> elementosVistos = new HashSet<>();
-            for (int fila = 0; fila < filas; fila++) {
-                int elemento = board[fila][columna];
-                if (elementosVistos.contains(elemento) || elemento == 0) {
-                    return false; // A repeated element was found in the column
-                }
-                elementosVistos.add(elemento);
-            }
-        }
-		
+	
 		// Evaluating regions
 		for (Region region : currentState.getRegions()) {
 			char operator = region.operator;
 			
 			// for "-" and "/" operators, only if needed
-			Coordenada firstCoordenada = region.nodos.iterator().next();
-        	Coordenada secondCoordenada = region.nodos.iterator().next();
+			Iterator <Coordenada> iterador = region.nodos.iterator();
+			Coordenada firstCoordenada = iterador.next();
+			Coordenada secondCoordenada=null;
+			if (iterador.hasNext())
+				secondCoordenada = iterador.next();
         	int firstValue = board[firstCoordenada.getRow()][firstCoordenada.getCol()];
         	int secondValue = board[secondCoordenada.getRow()][secondCoordenada.getCol()];
 
@@ -176,30 +156,51 @@ public class KenKenSolver {
                 case '+':
                 	int sum = 0;
                 	for (Coordenada coordenada: region.nodos){
-                		sum = sum + board[coordenada.getRow()][coordenada.getCol()];
+                		if (board[coordenada.getRow()][coordenada.getCol()]>0)
+                			sum = sum + board[coordenada.getRow()][coordenada.getCol()];
+                		else
+                			return false;
                 	}
                 	if (sum != region.target) {
                 		return false;
                 	}
+                	break;
                 case '-':
+                	if (firstValue==0 || secondValue==0) return false;
                 	if (Math.abs(firstValue - secondValue) != region.target) {
                 		return false;
                 	}
+                	break;
+                case 'x':
                 case '*':
                 	int prod = 1;
                 	for (Coordenada coordenada: region.nodos){
-                		prod = prod * board[coordenada.getRow()][coordenada.getCol()];
+                		if (board[coordenada.getRow()][coordenada.getCol()]>0)
+                			prod = prod * board[coordenada.getRow()][coordenada.getCol()];
+                		else
+                			return false;
                 	}
                 	if (prod != region.target) {
                 		return false;
                 	}
+                	break;
                 case '/':
-                	if (
-                		(firstValue % secondValue != 0 || firstValue / secondValue != region.target) || 
-                    	(secondValue % firstValue != 0 || secondValue / firstValue != region.target)
-                    ) {
-                		return false;
-                	}
+                	if (firstValue==0 || secondValue==0) return false;
+                	
+                	if (firstValue > secondValue){
+            			if (!(firstValue % secondValue==0 && firstValue / secondValue == region.target))
+            				return false;
+            		}
+            		else if (firstValue < secondValue){
+            			if (!(secondValue % firstValue ==0 && secondValue /firstValue  == region.target))
+            				return false;
+            		}
+            		else{
+            			if (region.target!=1)
+            				return false;
+            		}
+                	
+                	
             }
         }
 		
@@ -207,5 +208,78 @@ public class KenKenSolver {
 		return true;
 	}
 	
+	//pruningStrategy return true if the node must be eliminate in the tree 
+	private boolean pruningStrategy(KenKenState currentState){
+		
+		int [][] board = currentState.board;
+		
+		if (isValueRepeatedInRowOrColumn(board)) {
+			return true;
+		}
+		
+		for (Region region : currentState.getRegions()) {
+			char operator = region.operator;
+			
+			// for "-" and "/" operators, only if needed
+			Iterator <Coordenada> iterador = region.nodos.iterator();
+			Coordenada firstCoordenada = iterador.next();
+			Coordenada secondCoordenada=null;
+			if (iterador.hasNext())
+				secondCoordenada = iterador.next();
+        	int firstValue = board[firstCoordenada.getRow()][firstCoordenada.getCol()];
+        	int secondValue = board[secondCoordenada.getRow()][secondCoordenada.getCol()];
+
+            switch (operator) {
+                case '+':
+                	int sum = 0;
+                	for (Coordenada coordenada: region.nodos){
+                		if (board[coordenada.getRow()][coordenada.getCol()]>0 )
+                			sum = sum + board[coordenada.getRow()][coordenada.getCol()];
+                	}
+                	if (sum > region.target) {
+                		return true;
+                	}
+                	break;
+                case '-':
+                	
+                	if (Math.abs(firstValue - secondValue) < region.target && firstValue>0 && secondValue>0) {
+                		return true;
+                	}
+                	break;
+                case 'x':
+                case '*':
+                	int prod = 1;
+                	for (Coordenada coordenada: region.nodos){
+                		if (board[coordenada.getRow()][coordenada.getCol()]>0 )
+                			prod = prod * board[coordenada.getRow()][coordenada.getCol()];
+                	}
+                	if (prod > region.target) {
+                		return true;
+                	}
+                	break;
+                case '/':
+                	if (firstValue!=0 && secondValue!=0){ 
+                		if (firstValue > secondValue){
+                			if (!(firstValue % secondValue==0 && firstValue / secondValue == region.target))
+                				return true;
+                		}
+                		else if (firstValue < secondValue){
+                			if (!(secondValue % firstValue ==0 && secondValue /firstValue  == region.target))
+                				return true;
+                		}
+                		else{
+                			if (region.target!=1)
+                				return true;
+                		}
+                		
+                	}
+                	break;
+            }
+        }
+		
+		
+		
+		return false;
+	} 
 	
 }
