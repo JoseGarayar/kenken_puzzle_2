@@ -8,9 +8,20 @@ public class Principal {
 	public static void main(String[] args) {
 		//System.out.println("Hola mundo!");
 		
+		PerformKenkenPuzzle("\\kenken_puzzle_2\\src\\puzzle\\kenken1.txt", SearchType.BFS);
+		PerformKenkenPuzzle("\\kenken_puzzle_2\\src\\puzzle\\kenken1.txt", SearchType.DFS);
 		
-		PerformKenkenPuzzle("\\kenken_puzzle_2\\src\\puzzle\\kenken5.txt", SearchType.BFS);
-		PerformKenkenPuzzle("\\kenken_puzzle_2\\src\\puzzle\\kenken5.txt", SearchType.DFS);
+		PerformKenkenPuzzle("\\kenken_puzzle_2\\src\\puzzle\\kenken2.txt", SearchType.BFS);
+		PerformKenkenPuzzle("\\kenken_puzzle_2\\src\\puzzle\\kenken2.txt", SearchType.DFS);
+		
+		PerformKenkenPuzzle("\\kenken_puzzle_2\\src\\puzzle\\kenken3.txt", SearchType.BFS);
+		PerformKenkenPuzzle("\\kenken_puzzle_2\\src\\puzzle\\kenken3.txt", SearchType.DFS);
+		
+		PerformKenkenPuzzle("\\kenken_puzzle_2\\src\\puzzle\\kenken4.txt", SearchType.BFS);
+		PerformKenkenPuzzle("\\kenken_puzzle_2\\src\\puzzle\\kenken4.txt", SearchType.DFS);
+		
+		//PerformKenkenPuzzle("\\kenken_puzzle_2\\src\\puzzle\\kenken5.txt", SearchType.BFS);
+		//PerformKenkenPuzzle("\\kenken_puzzle_2\\src\\puzzle\\kenken5.txt", SearchType.DFS);
 		
 		
 	}
