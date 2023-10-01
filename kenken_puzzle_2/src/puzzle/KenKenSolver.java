@@ -1,56 +1,55 @@
 package puzzle;
 
-import java.util.ArrayDeque;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Set;
+
 
 
 public class KenKenSolver {
 	Explorados explored;
+	private int maxPathdepth;
 	
 	public KenKenSolver(){
 		explored = new Explorados();
+		maxPathdepth=0;
 	}
 	
-	public Nodo solve(Nodo initialNode) {
-        Borde frontier = new Borde(true); // Change to false to use LIFO (stack)
+	public int getmaxPathdepth(){
+		return maxPathdepth;
+	}
+	
+	public Nodo solve(Nodo initialNode, SearchType searchType) {
+        Borde frontier = new Borde(searchType==SearchType.BFS? true: false); // Change to false to use LIFO (stack)
+        explored.clear();
+        maxPathdepth=0;
         frontier.insert(initialNode);
         while (!frontier.isEmpty()) {
         	Nodo currentNode = frontier.pop();
             KenKenState currentState = currentNode.state;
+            explored.insert(currentNode);
+            if (currentNode.profundidad>maxPathdepth) maxPathdepth = currentNode.profundidad;
             if (isGoalState(currentState)) {
                 return currentNode; // ¡We found the solution!
             }
-            explored.insert(currentNode);
-
             // Generate and add new neighbor nodes to frontier
             List<Nodo> neighborNodes = generateNeighborNodes(currentNode);
 
             for (Nodo neighborNode : neighborNodes) {
-            	/*for (int i = 0; i < neighborNode.state.board.length; i++) {
-                    // Loop through the columns
-                    for (int j = 0; j < neighborNode.state.board[i].length; j++) {
-                        // Print the element at matrix[i][j] followed by a space
-                        System.out.print(neighborNode.state.board[i][j] + " ");
-                    }
-                    // Print a newline after each row
-                    System.out.println();
-                }*/            	
-                if (!explored.buscar(neighborNode) && !pruningStrategy(neighborNode.state)) {
-                	neighborNode.state.printBoard(); 
+                if (!explored.buscar(neighborNode) && !pruningStrategy(neighborNode.state)) {            
                     frontier.insert(neighborNode);
                 }
-            }
-            frontier.showQueue();
+            }         
         }
-
         return null; // Solution not found
     }
+	
+	public int getTotalExpandedNodes(){
+		return explored.size();
+	}
 	
 	private List<Nodo> generateNeighborNodes(Nodo currentNode) {
 		KenKenState currentState = currentNode.state;
@@ -91,7 +90,7 @@ public class KenKenSolver {
 			KenKenState NeighbourState = new KenKenState(newBoard.length);
 			NeighbourState.board = newBoard;
 			NeighbourState.setRegions(currentState.getRegions());
-			Nodo neighbourNode = new Nodo(NeighbourState, currentNode, 0, currentNode.profundidad + 1, "");
+			Nodo neighbourNode = new Nodo(NeighbourState, currentNode, currentNode.costoCamino+1, currentNode.profundidad + 1, "");
 			listNewNodes.add(neighbourNode);
 		}
 		return listNewNodes;

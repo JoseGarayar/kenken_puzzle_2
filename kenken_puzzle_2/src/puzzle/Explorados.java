@@ -7,6 +7,7 @@ public class Explorados {
 	
 	public Explorados(){
 		nodosExplorados = new HashSet<>();
+		
 	}
 	
 	public void insert(Nodo nodo){
@@ -22,5 +23,13 @@ public class Explorados {
 	
 	public boolean buscar(Nodo nodo) {
 		return nodosExplorados.contains(nodo.state.board);
+	}
+	
+	public int size(){
+		return nodosExplorados.size(); 
+	}
+	
+	public void clear(){
+		nodosExplorados.clear();
 	}
 }

@@ -38,7 +38,34 @@ public class KenKenState {
             // Loop through the columns
             for (int j = 0; j < board[i].length; j++) {
                 // Print the element at matrix[i][j] followed by a space
-                System.out.print(board[i][j] + " ");
+                System.out.print(board[i][j] + "\t");
+            }
+            // Print a newline after each row
+            System.out.println();
+        }
+	}
+	
+	public void printBoardWithRegion(){
+		
+		String [][] boardRegion = new String[board.length][board.length];
+		
+		for (int i = 0; i < board.length; i++) {            
+            for (int j = 0; j < board[i].length; j++) {            
+                boardRegion[i][j] = Integer.toString( board[i][j]);
+            }            
+        }
+		for (Region region : regions){
+			for (Coordenada coordenada: region.nodos){
+				boardRegion[coordenada.getRow()][coordenada.getCol()] =  Character.toString(region.operator)+Integer.toString(region.target);				
+			}
+		}
+		
+				
+		for (int i = 0; i < boardRegion.length; i++) {
+            // Loop through the columns
+            for (int j = 0; j < boardRegion[i].length; j++) {
+                // Print the element at matrix[i][j] followed by a space
+                System.out.print(boardRegion[i][j] + " \t");
             }
             // Print a newline after each row
             System.out.println();
