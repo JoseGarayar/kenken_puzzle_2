@@ -28,7 +28,7 @@ public class KenKenSolver {
             explored.insert(currentNode);
             
             if (currentNode.profundidad>maxPathdepth) maxPathdepth = currentNode.profundidad;
-            
+                        
             if (currentNode.state.isGoalState()) {
                 return currentNode; // ¡We found the solution!
             }

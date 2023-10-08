@@ -1,26 +1,33 @@
 package puzzle;
 
 import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class Borde {
-	private Queue<Nodo> queue;
+	private Deque<Nodo> queue;
 	private HashSet<int[][]> nodosBorde;
+	private boolean fifo;
 	
 	public Borde(boolean fifo){
-		if (fifo) {
+		this.fifo= fifo;
+		queue =  new ArrayDeque<>();
+		/*if (fifo) {
 			queue = new LinkedList<>(); // FIFO
 		} else {
 			queue = new ArrayDeque<>(); // LIFO
-		}
+		}*/
 		nodosBorde = new HashSet<int[][]>();
 	}
 	
 	public void insert(Nodo nodo){
 		if (!nodosBorde.contains(nodo)) {
-			queue.add(nodo);
+			if (fifo)
+				queue.offer(nodo);
+			else
+				queue.push(nodo);
 			nodosBorde.add(nodo.state.board);
 		}
 	}
@@ -29,7 +36,11 @@ public class Borde {
 		if (queue.isEmpty()){
 			return null;
 		}
-		Nodo nodo = queue.poll();
+		Nodo nodo;
+		if (fifo)
+			nodo = queue.poll();
+		else 
+			nodo = queue.pop();
 		nodosBorde.remove(nodo.state.board);
 		return nodo;
 	}
