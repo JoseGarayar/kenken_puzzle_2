@@ -6,7 +6,7 @@ public class Principal {
 	
 	
 	public static void main(String[] args) {
-		//System.out.println("Hola mundo!");
+		
 		
 		PerformKenkenPuzzle("\\kenken_puzzle_2\\src\\puzzle\\kenken1.txt", SearchType.BFS);
 		PerformKenkenPuzzle("\\kenken_puzzle_2\\src\\puzzle\\kenken1.txt", SearchType.DFS);
@@ -20,8 +20,8 @@ public class Principal {
 		PerformKenkenPuzzle("\\kenken_puzzle_2\\src\\puzzle\\kenken4.txt", SearchType.BFS);
 		PerformKenkenPuzzle("\\kenken_puzzle_2\\src\\puzzle\\kenken4.txt", SearchType.DFS);
 		
-		//PerformKenkenPuzzle("\\kenken_puzzle_2\\src\\puzzle\\kenken5.txt", SearchType.BFS);
-		//PerformKenkenPuzzle("\\kenken_puzzle_2\\src\\puzzle\\kenken5.txt", SearchType.DFS);
+		PerformKenkenPuzzle("\\kenken_puzzle_2\\src\\puzzle\\kenken5.txt", SearchType.BFS);
+		PerformKenkenPuzzle("\\kenken_puzzle_2\\src\\puzzle\\kenken5.txt", SearchType.DFS);
 		
 		
 	}
@@ -38,8 +38,9 @@ public class Principal {
 			Nodo solution = solver.solve(initialNode,searchType);
 			long endTime = (System.nanoTime()-startTime)/1000000;
 			
-			
+			System.out.println("--------------------------------------------------");
 			System.out.println(searchType== SearchType.BFS? "Breadth First Search - BFS": "Depth First Search - DFS");
+			System.out.println("--------------------------------------------------");
 			System.out.println("Kenken Puzzle!");
 			solution.state.printBoardWithRegion();
 			System.out.println(" ");
