@@ -220,7 +220,7 @@ public class KenKenState {
 	                	break;
 	                case '-':
 	                	
-	                	if (Math.abs(firstValue - secondValue) < region.target && firstValue>0 && secondValue>0) {
+	                	if (Math.abs(firstValue - secondValue) != region.target && firstValue>0 && secondValue>0) {
 	                		return true;
 	                	}
 	                	break;
