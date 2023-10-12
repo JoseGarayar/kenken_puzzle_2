@@ -208,18 +208,26 @@ public class KenKenState {
 	        	int secondValue = board[secondCoordenada.getRow()][secondCoordenada.getCol()];
 
 	            switch (operator) {
-	                case '+':
+		            case '+':
 	                	int sum = 0;
+	                	int nroNodosVacios= 0;
 	                	for (Coordenada coordenada: region.nodos){
 	                		if (board[coordenada.getRow()][coordenada.getCol()]>0 )
 	                			sum = sum + board[coordenada.getRow()][coordenada.getCol()];
+	                		else
+	                			nroNodosVacios++;
 	                	}
 	                	if (sum > region.target) {
 	                		return true;
 	                	}
+	                	if (nroNodosVacios==1){
+	                		if ( (sum+board[0].length) < region.target   )
+	                			return true;
+	                		if (sum == region.target) 
+		                		return true;		                	
+	                	}
 	                	break;
 	                case '-':
-	                	
 	                	if (Math.abs(firstValue - secondValue) != region.target && firstValue>0 && secondValue>0) {
 	                		return true;
 	                	}
@@ -227,12 +235,19 @@ public class KenKenState {
 	                case 'x':
 	                case '*':
 	                	int prod = 1;
+	                	int nroVacios= 0;
 	                	for (Coordenada coordenada: region.nodos){
 	                		if (board[coordenada.getRow()][coordenada.getCol()]>0 )
 	                			prod = prod * board[coordenada.getRow()][coordenada.getCol()];
+	                		else 
+	                			nroVacios++;
 	                	}
 	                	if (prod > region.target) {
 	                		return true;
+	                	}
+	                	if (nroVacios==1){
+	                		if ( (prod*board[0].length) < region.target   )
+	                			return true;
 	                	}
 	                	break;
 	                case '/':
