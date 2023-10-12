@@ -76,7 +76,6 @@ public class KenKenState {
 	}
 	
 	public boolean isGoalState(){
-		//int [][] board = currentState.board;
 		
 		if (isValueRepeatedInRowOrColumn()) {
 			return false;
@@ -189,8 +188,6 @@ public class KenKenState {
 	//pruningStrategy return true if the node must be eliminate in the tree 
 	public boolean pruningStrategy(){
 			
-			//int [][] board = currentState.board;
-			
 			if (isValueRepeatedInRowOrColumn()) {
 				return true;
 			}
@@ -220,12 +217,10 @@ public class KenKenState {
 	                	if (sum > region.target) {
 	                		return true;
 	                	}
-	                	if (nroNodosVacios==1){
-	                		if ( (sum+board[0].length) < region.target   )
-	                			return true;
-	                		if (sum == region.target) 
-		                		return true;		                	
-	                	}
+	                	if ( (sum+board[0].length*nroNodosVacios) < region.target   )
+	                		return true;
+	                	if (nroNodosVacios==1 && sum == region.target)
+	                		return true;
 	                	break;
 	                case '-':
 	                	if (Math.abs(firstValue - secondValue) != region.target && firstValue>0 && secondValue>0) {
@@ -245,10 +240,8 @@ public class KenKenState {
 	                	if (prod > region.target) {
 	                		return true;
 	                	}
-	                	if (nroVacios==1){
-	                		if ( (prod*board[0].length) < region.target   )
-	                			return true;
-	                	}
+	                	if (nroVacios>0 && nroVacios< region.nodos.size() && (prod* Math.pow(board[0].length, nroVacios) ) < region.target   )
+	                		return true;
 	                	break;
 	                case '/':
 	                	if (firstValue!=0 && secondValue!=0){ 

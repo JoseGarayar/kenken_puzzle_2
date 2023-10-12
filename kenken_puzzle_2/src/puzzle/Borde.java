@@ -14,11 +14,6 @@ public class Borde {
 	public Borde(boolean fifo){
 		this.fifo= fifo;
 		queue =  new ArrayDeque<>();
-		/*if (fifo) {
-			queue = new LinkedList<>(); // FIFO
-		} else {
-			queue = new ArrayDeque<>(); // LIFO
-		}*/
 		nodosBorde = new HashSet<int[][]>();
 	}
 	
